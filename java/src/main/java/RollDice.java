@@ -28,12 +28,17 @@ public class RollDice {
     }
 
     public int ones() {
-        return Arrays.stream(dices).filter(value->value == 1).sum();
+        return allOfASingleValue(1);
     }
 
     public int twos() {
-        return Arrays.stream(dices).filter(value->value == 2).sum();
+        return allOfASingleValue(2);
     }
+
+    private int allOfASingleValue(int kindValue) {
+        return Arrays.stream(dices).filter(value -> value == kindValue).sum();
+    }
+
 
     public static int threes(int d1, int d2, int d3, int d4, int d5) {
         int s;
