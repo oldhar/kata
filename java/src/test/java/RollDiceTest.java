@@ -69,12 +69,15 @@ public class RollDiceTest {
 
     @Nested
     class Single_values_uses_cases {
-        @Test
-        public void ones() {
-            assertEquals(1, RollDice.ones(1, 2, 3, 4, 5));
-            assertEquals(2, RollDice.ones(1, 2, 1, 4, 5));
-            assertEquals(0, RollDice.ones(6, 2, 2, 4, 5));
-            assertEquals(4, RollDice.ones(1, 2, 1, 1, 1));
+        @ParameterizedTest
+        @CsvSource({
+                "1, 1; 2; 3; 4; 5",
+                "2, 1; 2; 1; 4; 5",
+                "0, 6; 2; 2; 4; 5",
+                "4, 1; 2; 1; 1; 1"
+        })
+        public void ones(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
+            assertEquals(expectedScore, new RollDice(dices).ones());
         }
 
         @Test
