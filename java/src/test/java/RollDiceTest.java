@@ -80,11 +80,15 @@ public class RollDiceTest {
             assertEquals(expectedScore, new RollDice(dices).ones());
         }
 
-        @Test
-        public void twos() {
-            assertEquals(4, RollDice.twos(1, 2, 3, 2, 6));
-            assertEquals(10, RollDice.twos(2, 2, 2, 2, 2));
+        @ParameterizedTest
+        @CsvSource({
+                "4, 1; 2; 3; 2; 6",
+                "10, 2; 2; 2; 2; 2",
+        })
+        public void twos(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
+            assertEquals(expectedScore, new RollDice(dices).twos());
         }
+
 
         @Test
         public void threes() {
