@@ -90,31 +90,43 @@ public class RollDiceTest {
         }
 
 
-        @Test
-        public void threes() {
-            assertEquals(6, RollDice.threes(1, 2, 3, 2, 3));
-            assertEquals(12, RollDice.threes(2, 3, 3, 3, 3));
+        @ParameterizedTest
+        @CsvSource({
+                "6, 1; 2; 3; 2; 3",
+                "12, 2; 3; 3; 3; 3",
+        })
+        public void threes(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
+            assertEquals(expectedScore, new RollDice(dices).threes());
         }
 
-        @Test
-        public void fours() {
-            assertEquals(12, new RollDice(4, 4, 4, 5, 5).fours());
-            assertEquals(8, new RollDice(4, 4, 5, 5, 5).fours());
-            assertEquals(4, new RollDice(4, 5, 5, 5, 5).fours());
+        @ParameterizedTest
+        @CsvSource({
+                "12, 4; 4; 4; 5; 5",
+                "8, 4; 4; 5; 5; 5",
+                "4, 4; 5; 5; 5; 5",
+        })
+        public void fours(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
+            assertEquals(expectedScore, new RollDice(dices).fours());
         }
 
-        @Test
-        public void fives() {
-            assertEquals(10, new RollDice(4, 4, 4, 5, 5).fives());
-            assertEquals(15, new RollDice(4, 4, 5, 5, 5).fives());
-            assertEquals(20, new RollDice(4, 5, 5, 5, 5).fives());
+        @ParameterizedTest
+        @CsvSource({
+                "10, 4; 4; 4; 5; 5",
+                "15, 4; 4; 5; 5; 5",
+                "20, 4; 5; 5; 5; 5",
+        })
+        public void fives(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
+            assertEquals(expectedScore, new RollDice(dices).fives());
         }
 
-        @Test
-        public void sixes() {
-            assertEquals(0, new RollDice(4, 4, 4, 5, 5).sixes());
-            assertEquals(6, new RollDice(4, 4, 6, 5, 5).sixes());
-            assertEquals(18, new RollDice(6, 5, 6, 6, 5).sixes());
+        @ParameterizedTest
+        @CsvSource({
+                "0, 4; 4; 4; 5; 5",
+                "6, 4; 4; 6; 5; 5",
+                "18, 6; 5; 6; 6; 5",
+        })
+        public void sixes(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
+            assertEquals(expectedScore, new RollDice(dices).sixes());
         }
     }
 

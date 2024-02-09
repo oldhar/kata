@@ -40,43 +40,20 @@ public class RollDice {
     }
 
 
-    public static int threes(int d1, int d2, int d3, int d4, int d5) {
-        int s;
-        s = 0;
-        if (d1 == 3) s += 3;
-        if (d2 == 3) s += 3;
-        if (d3 == 3) s += 3;
-        if (d4 == 3) s += 3;
-        if (d5 == 3) s += 3;
-        return s;
+    public int threes() {
+        return allOfASingleValue(3);
     }
 
     public int fours() {
-        int sum;
-        sum = 0;
-        for (int at = 0; at != 5; at++) {
-            if (dices[at] == 4) {
-                sum += 4;
-            }
-        }
-        return sum;
+        return allOfASingleValue(4);
     }
 
     public int fives() {
-        int s = 0;
-        int i;
-        for (i = 0; i < dices.length; i++)
-            if (dices[i] == 5)
-                s = s + 5;
-        return s;
+        return allOfASingleValue(5);
     }
 
     public int sixes() {
-        int sum = 0;
-        for (int at = 0; at < dices.length; at++)
-            if (dices[at] == 6)
-                sum = sum + 6;
-        return sum;
+        return allOfASingleValue(6);
     }
 
     public static int score_pair(int d1, int d2, int d3, int d4, int d5) {
