@@ -36,8 +36,8 @@ public class RollDiceTest {
     class Chance_uses_cases {
         @Test
         public void all_dices_are_summed() {
-            assertEquals(15, RollDice.chance(2, 3, 4, 5, 1));
-            assertEquals(16, RollDice.chance(3, 3, 4, 5, 1));
+            assertEquals(15, new RollDice(2, 3, 4, 5, 1).chance());
+            assertEquals(16, new RollDice(3, 3, 4, 5, 1).chance());
         }
     }
 
