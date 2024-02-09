@@ -1,3 +1,7 @@
+import java.util.Arrays;
+import java.util.OptionalInt;
+import java.util.function.IntPredicate;
+
 public class RollDice {
 
     protected int[] dices;
@@ -6,6 +10,9 @@ public class RollDice {
         this.dices = dices;
         if(dices.length!=5){
             throw new IllegalArgumentException("five_dices_not_provided");
+        }
+        if(Arrays.stream(dices).filter(diceValue -> diceValue < 1 || diceValue > 6).findFirst().isPresent()){
+            throw new IllegalArgumentException("dice_value_out_of_bounds");
         }
     }
 

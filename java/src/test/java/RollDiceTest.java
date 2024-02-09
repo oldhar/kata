@@ -20,6 +20,15 @@ public class RollDiceTest {
 
             assertEquals("five_dices_not_provided", message);
         }
+
+        @Test
+        public void error_when_at_least_one_dice_value_is_not(){
+            String message = assertThrows(IllegalArgumentException.class, () -> {
+                new RollDice(1, 1, 1, 1, 7);
+            }).getMessage();
+
+            assertEquals("dice_value_out_of_bounds", message);
+        }
     }
 
 
