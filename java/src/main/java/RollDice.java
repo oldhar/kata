@@ -1,5 +1,14 @@
 public class RollDice {
 
+    protected int[] dices;
+
+    public RollDice(int ... dices) {
+        this.dices = dices;
+        if(dices.length!=5){
+            throw new IllegalArgumentException("five_dices_not_provided");
+        }
+    }
+
     public static int chance(int d1, int d2, int d3, int d4, int d5)
     {
         int total = 0;
@@ -55,23 +64,12 @@ public class RollDice {
         return s;
     }
 
-    protected int[] dice;
-    public RollDice(int d1, int d2, int d3, int d4, int _5)
-    {
-        dice = new int[5];
-        dice[0] = d1;
-        dice[1] = d2;
-        dice[2] = d3;
-        dice[3] = d4;
-        dice[4] = _5;
-    }
-
     public int fours()
     {
         int sum;    
         sum = 0;
         for (int at = 0; at != 5; at++) {
-            if (dice[at] == 4) {
+            if (dices[at] == 4) {
                 sum += 4;
             }
         }
@@ -82,8 +80,8 @@ public class RollDice {
     {
         int s = 0;
         int i;
-        for (i = 0; i < dice.length; i++) 
-            if (dice[i] == 5)
+        for (i = 0; i < dices.length; i++)
+            if (dices[i] == 5)
                 s = s + 5;
         return s;
     }
@@ -91,8 +89,8 @@ public class RollDice {
     public int sixes()
     {
         int sum = 0;
-        for (int at = 0; at < dice.length; at++) 
-            if (dice[at] == 6)
+        for (int at = 0; at < dices.length; at++)
+            if (dices[at] == 6)
                 sum = sum + 6;
         return sum;
     }

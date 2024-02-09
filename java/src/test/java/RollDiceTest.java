@@ -1,10 +1,26 @@
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public class RollDiceTest {
+
+    @Nested
+    class General_roll_dice_uses_cases {
+        @Test
+        public void five_dices_rolled(){
+            new RollDice(1,1,1,1,1);
+        }
+
+        @Test
+        public void error_when_not_five_dices_rolled(){
+            String message = assertThrows(IllegalArgumentException.class, () -> {
+                new RollDice(1, 1, 1, 1);
+            }).getMessage();
+
+            assertEquals("five_dices_not_provided", message);
+        }
+    }
 
 
     @Nested
