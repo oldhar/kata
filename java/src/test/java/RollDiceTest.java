@@ -1,4 +1,9 @@
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.converter.ConvertWith;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,10 +39,13 @@ public class RollDiceTest {
 
     @Nested
     class Chance_uses_cases {
-        @Test
-        public void all_dices_are_summed() {
-            assertEquals(15, new RollDice(2, 3, 4, 5, 1).chance());
-            assertEquals(16, new RollDice(3, 3, 4, 5, 1).chance());
+        @ParameterizedTest
+        @CsvSource({
+                "15, 2; 3; 4; 5; 1",
+                "16, 3; 3; 4; 5; 1"
+        })
+        public void all_dices_are_summed(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
+             assertEquals(expectedScore, new RollDice(dices).chance());
         }
     }
 
