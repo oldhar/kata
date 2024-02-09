@@ -51,11 +51,18 @@ public class RollDiceTest {
 
     @Nested
     class Yatzy_uses_cases {
+        @ParameterizedTest
+        @CsvSource({
+                "4; 4; 4; 4; 4",
+                "6; 6; 6; 6; 6"
+        })
+        public void yatzy_scores_50_if_all_values_equals(@ConvertWith(DiceConverter.class) int[] dices) {
+            assertEquals(RollDice.YATZY_SCORE, new RollDice(dices).yatzy());
+        }
+
         @Test
-        public void yatzy_scores_50() {
-            assertEquals(50, RollDice.yatzy(4, 4, 4, 4, 4));
-            assertEquals(50, RollDice.yatzy(6, 6, 6, 6, 6));
-            assertEquals(0, RollDice.yatzy(6, 6, 6, 6, 3));
+        public void yatzy_scores_0_if_not_all_values_equals() {
+            assertEquals(0, new RollDice(6, 6, 6, 6, 3).yatzy());
         }
     }
 
