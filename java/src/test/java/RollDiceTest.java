@@ -70,7 +70,7 @@ public class RollDiceTest {
 
         @Test
         public void yatzy_scores_0_if_not_all_values_equals() {
-            assertEquals(0, new RollDice(6, 6, 6, 6, 3).yatzy());
+            assertEquals(RollDice.NOT_MATCHING_COMBINATION_SCORE, new RollDice(6, 6, 6, 6, 3).yatzy());
         }
     }
 

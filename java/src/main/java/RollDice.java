@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 public class RollDice {
     public static int YATZY_SCORE = 50;
+    public static int NOT_MATCHING_COMBINATION_SCORE = 0;
 
     protected int[] dices;
 
@@ -33,10 +34,10 @@ public class RollDice {
     }
 
     public int yatzy() {
-        if (findSameOfAKind(dices, 5) != 0) {
+        if (findSameOfAKind(dices, 5) != NOT_MATCHING_COMBINATION_SCORE) {
             return YATZY_SCORE;
         } else {
-            return 0;
+            return NOT_MATCHING_COMBINATION_SCORE;
         }
     }
 
@@ -87,7 +88,7 @@ public class RollDice {
         if (biggestDiceValue.isPresent()) {
             return calculateDices(nbOfDices, biggestDiceValue.get());
         } else {
-            return 0;
+            return NOT_MATCHING_COMBINATION_SCORE;
         }
     }
 
@@ -119,10 +120,10 @@ public class RollDice {
             if (secondPairBiggestValue.isPresent()) {
                 return calculateDices(2, biggestDiceValue.get()) + calculateDices(2, secondPairBiggestValue.get());
             } else {
-                return 0;
+                return NOT_MATCHING_COMBINATION_SCORE;
             }
         } else {
-            return 0;
+            return NOT_MATCHING_COMBINATION_SCORE;
         }
     }
 
@@ -143,10 +144,10 @@ public class RollDice {
             if (secondPairBiggestValue.isPresent()) {
                 return calculateDices(3, biggestDiceValue.get()) + calculateDices(2, secondPairBiggestValue.get());
             } else {
-                return 0;
+                return NOT_MATCHING_COMBINATION_SCORE;
             }
         } else {
-            return 0;
+            return NOT_MATCHING_COMBINATION_SCORE;
         }
     }
 
@@ -167,7 +168,7 @@ public class RollDice {
         if (existsOnlyOneValuePerDice && diceStraightConstraintIsVerified) {
             return Arrays.stream(dices).sum();
         } else {
-            return 0;
+            return NOT_MATCHING_COMBINATION_SCORE;
         }
     }
 
