@@ -9,7 +9,11 @@ public class RollDice {
 
     protected int[] dices;
 
-    public RollDice(int... dices) {
+    public RollDice(Dice dice1, Dice dice2, Dice dice3,  Dice dice4, Dice dice5) {
+        this.dices = new int[] {dice1.getValue(), dice2.getValue(), dice3.getValue(), dice4.getValue(), dice5.getValue()};
+    }
+
+    protected RollDice(int... dices) {
         this.dices = dices;
         if (dices.length != 5) {
             throw new IllegalArgumentException("five_dices_not_provided");
@@ -18,6 +22,11 @@ public class RollDice {
             throw new IllegalArgumentException("dice_value_out_of_bounds");
         }
     }
+
+    private void checkDices(int[] dices) {
+
+    }
+
 
     public int chance() {
         return Arrays.stream(dices).sum();

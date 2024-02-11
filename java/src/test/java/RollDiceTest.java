@@ -32,6 +32,16 @@ public class RollDiceTest {
 
             assertEquals("dice_value_out_of_bounds", message);
         }
+
+        @Test
+        public void public_usage_with_forced_dice_values(){
+            assertEquals(15, new RollDice(
+                    Dice.fromValue(1),
+                    Dice.fromValue(2),
+                    Dice.fromValue(3),
+                    Dice.fromValue(4),
+                    Dice.fromValue(5)).smallStraight());
+        }
     }
 
 
