@@ -50,7 +50,9 @@ public class RollDiceTest {
         @ParameterizedTest
         @CsvSource({
                 "15, 2; 3; 4; 5; 1",
-                "16, 3; 3; 4; 5; 1"
+                "16, 3; 3; 4; 5; 1",
+                "14, 1; 1; 3; 3; 6",
+                "21, 4; 5; 5; 6; 1",
         })
         public void all_dices_are_summed(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
              assertEquals(expectedScore, new RollDice(dices).chance());
@@ -61,17 +63,15 @@ public class RollDiceTest {
     class Yatzy_uses_cases {
         @ParameterizedTest
         @CsvSource({
-                "4; 4; 4; 4; 4",
-                "6; 6; 6; 6; 6"
+                "50, 4; 4; 4; 4; 4",
+                "50, 6; 6; 6; 6; 6",
+                "50, 1; 1; 1; 1; 1",
+                "0, 1; 1; 1; 2; 1"
         })
-        public void yatzy_scores_50_if_all_values_equals(@ConvertWith(DiceConverter.class) int[] dices) {
-            assertEquals(RollDice.YATZY_SCORE, new RollDice(dices).yatzy());
+        public void yatzy_scores_50_if_all_values_equals(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
+            assertEquals(expectedScore, new RollDice(dices).yatzy());
         }
 
-        @Test
-        public void yatzy_scores_0_if_not_all_values_equals() {
-            assertEquals(RollDice.NOT_MATCHING_COMBINATION_SCORE, new RollDice(6, 6, 6, 6, 3).yatzy());
-        }
     }
 
 
@@ -82,7 +82,8 @@ public class RollDiceTest {
                 "1, 1; 2; 3; 4; 5",
                 "2, 1; 2; 1; 4; 5",
                 "0, 6; 2; 2; 4; 5",
-                "4, 1; 2; 1; 1; 1"
+                "4, 1; 2; 1; 1; 1",
+                "0, 3; 3; 3; 4; 5"
         })
         public void ones(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
             assertEquals(expectedScore, new RollDice(dices).ones());
@@ -92,6 +93,7 @@ public class RollDiceTest {
         @CsvSource({
                 "4, 1; 2; 3; 2; 6",
                 "10, 2; 2; 2; 2; 2",
+                "4, 2; 3; 2; 5; 1",
         })
         public void twos(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
             assertEquals(expectedScore, new RollDice(dices).twos());
@@ -112,6 +114,7 @@ public class RollDiceTest {
                 "12, 4; 4; 4; 5; 5",
                 "8, 4; 4; 5; 5; 5",
                 "4, 4; 5; 5; 5; 5",
+                "8, 1; 1; 2; 4; 4",
         })
         public void fours(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
             assertEquals(expectedScore, new RollDice(dices).fours());
@@ -145,6 +148,11 @@ public class RollDiceTest {
                 "6, 3; 4; 3; 5; 6",
                 "10, 5; 3; 3; 3; 5",
                 "12, 5; 3; 6; 6; 5",
+                "0, 1; 2; 3; 4; 5",
+                "8, 3; 3; 3; 4; 4",
+                "12, 1; 1; 6; 2; 6",
+                "6, 3; 3; 3; 4; 1",
+                "6, 3; 3; 3; 3; 1",
         })
         public void pair(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
             assertEquals(expectedScore, new RollDice(dices).pair());
@@ -157,8 +165,10 @@ public class RollDiceTest {
                 "15, 5; 3; 5; 4; 5",
                 "9, 3; 3; 3; 3; 5",
                 "9, 3; 3; 3; 3; 3",
+                "0, 3; 3; 4; 5; 6",
+                "9, 3; 3; 3; 3; 1",
         })
-        public void triple(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
+        public void three_of_a_kind(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
             assertEquals(expectedScore, new RollDice(dices).threeOfAKind());
         }
 
@@ -166,8 +176,11 @@ public class RollDiceTest {
         @CsvSource({
                 "12, 3; 3; 3; 3; 5",
                 "20, 5; 5; 5; 4; 5",
+                "8, 2; 2; 2; 2; 5",
+                "0, 2; 2; 2; 5; 5",
+                "8, 2; 2; 2; 2; 2",
         })
-        public void quadruple(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
+        public void four_of_a_kind(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
             assertEquals(expectedScore, new RollDice(dices).fourOfAKind());
         }
 
@@ -177,6 +190,10 @@ public class RollDiceTest {
             @CsvSource({
                     "16, 3; 3; 5; 4; 5",
                     "16, 3; 3; 5; 5; 5",
+                    "8, 1; 1; 2; 3; 3",
+                    "0, 1; 1; 2; 3; 4",
+                    "6, 1; 1; 2; 2; 2",
+                    "0, 3; 3; 3; 3; 1", //use case to discuss
             })
             public void double_pair(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
                 assertEquals(expectedScore, new RollDice(dices).twoPairs());
@@ -186,6 +203,9 @@ public class RollDiceTest {
             @CsvSource({
                     "18, 6; 2; 2; 2; 6",
                     "0, 2; 3; 4; 5; 6",
+                    "8, 1; 1; 2; 2; 2",
+                    "0, 2; 2; 3; 3; 4",
+                    "0, 4; 4; 4; 4; 4", //use case to discuss
             })
             public void full_house(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
                 assertEquals(expectedScore, new RollDice(dices).fullHouse());

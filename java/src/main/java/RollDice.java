@@ -10,8 +10,8 @@ public class RollDice {
 
     protected int[] dices;
 
-    public RollDice(Dice dice1, Dice dice2, Dice dice3,  Dice dice4, Dice dice5) {
-        this.dices = new int[] {dice1.getValue(), dice2.getValue(), dice3.getValue(), dice4.getValue(), dice5.getValue()};
+    public RollDice(Dice dice1, Dice dice2, Dice dice3, Dice dice4, Dice dice5) {
+        this.dices = new int[]{dice1.getValue(), dice2.getValue(), dice3.getValue(), dice4.getValue(), dice5.getValue()};
     }
 
     protected RollDice(int... dices) {
@@ -23,11 +23,6 @@ public class RollDice {
             throw new IllegalArgumentException("dice_value_out_of_bounds");
         }
     }
-
-    private void checkDices(int[] dices) {
-
-    }
-
 
     public int chance() {
         return Arrays.stream(dices).sum();
@@ -117,7 +112,8 @@ public class RollDice {
         if (biggestDiceValue.isPresent()) {
             List<Integer> dicesWithoutFirstPair = removeNbOfDicesForValue(biggestDiceValue.get(), 2);
             Optional<Integer> secondPairBiggestValue = findBiggestDiceValue(dicesWithoutFirstPair.stream().mapToInt(i -> i).toArray(), 2);
-            if (secondPairBiggestValue.isPresent()) {
+            /* TODO: The 2nd condition matchs spec but to be discussed */
+            if (secondPairBiggestValue.isPresent() && secondPairBiggestValue.get() != biggestDiceValue.get()) {
                 return calculateDices(2, biggestDiceValue.get()) + calculateDices(2, secondPairBiggestValue.get());
             } else {
                 return NOT_MATCHING_COMBINATION_SCORE;
@@ -141,7 +137,8 @@ public class RollDice {
         if (biggestDiceValue.isPresent()) {
             List<Integer> dicesWithoutFirstPair = removeNbOfDicesForValue(biggestDiceValue.get(), 3);
             Optional<Integer> secondPairBiggestValue = findBiggestDiceValue(dicesWithoutFirstPair.stream().mapToInt(i -> i).toArray(), 2);
-            if (secondPairBiggestValue.isPresent()) {
+            /* TODO: The 2nd condition matchs spec but to be discussed */
+            if (secondPairBiggestValue.isPresent() && secondPairBiggestValue.get()!= biggestDiceValue.get()) {
                 return calculateDices(3, biggestDiceValue.get()) + calculateDices(2, secondPairBiggestValue.get());
             } else {
                 return NOT_MATCHING_COMBINATION_SCORE;
@@ -152,16 +149,16 @@ public class RollDice {
     }
 
     public int smallStraight() {
-        Predicate<int []> smallStraightPredicate = (dices)-> dices[0] == 1;
+        Predicate<int[]> smallStraightPredicate = (dices) -> dices[0] == 1;
         return calculateStraight(dices, smallStraightPredicate);
     }
 
     public int largeStraight() {
-        Predicate<int []> largeStraightPredicate = (dices)-> dices[4] == 6;
+        Predicate<int[]> largeStraightPredicate = (dices) -> dices[4] == 6;
         return calculateStraight(dices, largeStraightPredicate);
     }
 
-    private int calculateStraight(int[] dices, Predicate<int []> straightPredicate) {
+    private int calculateStraight(int[] dices, Predicate<int[]> straightPredicate) {
         boolean existsOnlyOneValuePerDice = existsOnlyOneValuePerDice(dices);
         Arrays.sort(dices);
         boolean diceStraightConstraintIsVerified = straightPredicate.test(dices);
