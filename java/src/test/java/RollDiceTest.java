@@ -163,10 +163,13 @@ public class RollDiceTest {
 
         @Nested
         class Combinations_uses_cases {
-            @Test
-            public void double_pair() {
-                assertEquals(16, RollDice.two_pairs(3, 3, 5, 4, 5));
-                assertEquals(16, RollDice.two_pairs(3, 3, 5, 5, 5));
+            @ParameterizedTest
+            @CsvSource({
+                    "16, 3; 3; 5; 4; 5",
+                    "16, 3; 3; 5; 5; 5",
+            })
+            public void double_pair(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
+                assertEquals(expectedScore, new RollDice(dices).twoPairs());
             }
 
             @Test
