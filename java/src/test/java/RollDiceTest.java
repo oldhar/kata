@@ -3,8 +3,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.ConvertWith;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -139,31 +137,36 @@ public class RollDiceTest {
                 "12, 5; 3; 6; 6; 5",
         })
         public void pair(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
-            assertEquals(expectedScore, new RollDice(dices).score_pair());
+            assertEquals(expectedScore, new RollDice(dices).pair());
         }
 
 
-        @Test
-        public void triple() {
-            assertEquals(9, RollDice.three_of_a_kind(3, 3, 3, 4, 5));
-            assertEquals(15, RollDice.three_of_a_kind(5, 3, 5, 4, 5));
-            assertEquals(9, RollDice.three_of_a_kind(3, 3, 3, 3, 5));
-            assertEquals(9, RollDice.three_of_a_kind(3, 3, 3, 3, 3));
+        @ParameterizedTest
+        @CsvSource({
+                "9, 3; 3; 3; 4; 5",
+                "15, 5; 3; 5; 4; 5",
+                "9, 3; 3; 3; 3; 5",
+                "9, 3; 3; 3; 3; 3",
+        })
+        public void triple(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
+            assertEquals(expectedScore, new RollDice(dices).threeOfAKind());
         }
 
-        @Test
-        public void quadruple() {
-            assertEquals(12, RollDice.four_of_a_kind(3, 3, 3, 3, 5));
-            assertEquals(20, RollDice.four_of_a_kind(5, 5, 5, 4, 5));
-
+        @ParameterizedTest
+        @CsvSource({
+                "12, 3; 3; 3; 3; 5",
+                "20, 5; 5; 5; 4; 5",
+        })
+        public void quadruple(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
+            assertEquals(expectedScore, new RollDice(dices).fourOfAKind());
         }
 
         @Nested
         class Combinations_uses_cases {
             @Test
             public void double_pair() {
-                assertEquals(16, RollDice.two_pair(3, 3, 5, 4, 5));
-                assertEquals(16, RollDice.two_pair(3, 3, 5, 5, 5));
+                assertEquals(16, RollDice.two_pairs(3, 3, 5, 4, 5));
+                assertEquals(16, RollDice.two_pairs(3, 3, 5, 5, 5));
             }
 
             @Test
