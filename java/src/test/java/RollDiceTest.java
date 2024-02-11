@@ -186,11 +186,14 @@ public class RollDiceTest {
 
     @Nested
     class Straight_uses_cases {
-        @Test
-        public void small_straight() {
-            assertEquals(15, RollDice.smallStraight(1, 2, 3, 4, 5));
-            assertEquals(15, RollDice.smallStraight(2, 3, 4, 5, 1));
-            assertEquals(0, RollDice.smallStraight(1, 2, 2, 4, 5));
+        @ParameterizedTest
+        @CsvSource({
+                "15, 1; 2; 3; 4; 5",
+                "15, 2; 3; 4; 5; 1",
+                "0, 1; 2; 2; 4; 5",
+        })
+        public void small_straight(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
+            assertEquals(expectedScore, new RollDice(dices).smallStraight());
         }
 
         @Test

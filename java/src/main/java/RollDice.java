@@ -87,14 +87,18 @@ public class RollDice {
     }
 
     private static Optional<Integer> findBiggestDiceValue(int[] dices, int nbOfDices) {
-        Optional<Integer> biggestDiceValue = Arrays.stream(dices)
-                .mapToObj(value -> new SimpleEntry<Integer, Integer>(value, 1))
-                .collect(Collectors.groupingBy(SimpleEntry::getKey, Collectors.counting()))
+        Optional<Integer> biggestDiceValue = countDicesPerValue(dices)
                 .entrySet().stream()
                 .filter(entry -> entry.getValue() >= nbOfDices)
                 .map(Entry::getKey)
                 .max(Comparator.naturalOrder());
         return biggestDiceValue;
+    }
+
+    private static Map<Integer, Long> countDicesPerValue(int[] dices) {
+        return Arrays.stream(dices)
+                .mapToObj(value -> new SimpleEntry<Integer, Integer>(value, 1))
+                .collect(Collectors.groupingBy(SimpleEntry::getKey, Collectors.counting()));
     }
 
     public int twoPairs() {
@@ -136,21 +140,15 @@ public class RollDice {
         }
     }
 
-    public static int smallStraight(int d1, int d2, int d3, int d4, int d5) {
-        int[] tallies;
-        tallies = new int[6];
-        tallies[d1 - 1] += 1;
-        tallies[d2 - 1] += 1;
-        tallies[d3 - 1] += 1;
-        tallies[d4 - 1] += 1;
-        tallies[d5 - 1] += 1;
-        if (tallies[0] == 1 &&
-                tallies[1] == 1 &&
-                tallies[2] == 1 &&
-                tallies[3] == 1 &&
-                tallies[4] == 1)
-            return 15;
-        return 0;
+    public int smallStraight() {
+        boolean existsOnlyOneValuePerDice = countDicesPerValue(dices).values().stream().allMatch(val -> val == 1);
+        Arrays.sort(dices);
+        boolean lowerDiceIsOne = dices[0] == 1;
+        if (existsOnlyOneValuePerDice && lowerDiceIsOne) {
+            return Arrays.stream(dices).sum();
+        } else {
+            return 0;
+        }
     }
 
     public static int largeStraight(int d1, int d2, int d3, int d4, int d5) {
