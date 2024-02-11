@@ -132,16 +132,19 @@ public class RollDiceTest {
 
     @Nested
     class Same_of_a_kind_uses_cases {
-        @Test
-        public void two_of_them() {
-            assertEquals(6, RollDice.score_pair(3, 4, 3, 5, 6));
-            assertEquals(10, RollDice.score_pair(5, 3, 3, 3, 5));
-            assertEquals(12, RollDice.score_pair(5, 3, 6, 6, 5));
+        @ParameterizedTest
+        @CsvSource({
+                "6, 3; 4; 3; 5; 6",
+                "10, 5; 3; 3; 3; 5",
+                "12, 5; 3; 6; 6; 5",
+        })
+        public void pair(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
+            assertEquals(expectedScore, new RollDice(dices).score_pair());
         }
 
 
         @Test
-        public void three_of_them() {
+        public void triple() {
             assertEquals(9, RollDice.three_of_a_kind(3, 3, 3, 4, 5));
             assertEquals(15, RollDice.three_of_a_kind(5, 3, 5, 4, 5));
             assertEquals(9, RollDice.three_of_a_kind(3, 3, 3, 3, 5));
@@ -149,7 +152,7 @@ public class RollDiceTest {
         }
 
         @Test
-        public void four_of_them() {
+        public void quadruple() {
             assertEquals(12, RollDice.four_of_a_kind(3, 3, 3, 3, 5));
             assertEquals(20, RollDice.four_of_a_kind(5, 5, 5, 4, 5));
 

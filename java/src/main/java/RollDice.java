@@ -1,4 +1,9 @@
-import java.util.Arrays;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class RollDice {
     public static int YATZY_SCORE = 50;
@@ -56,18 +61,24 @@ public class RollDice {
         return allOfASingleValue(6);
     }
 
-    public static int score_pair(int d1, int d2, int d3, int d4, int d5) {
-        int[] counts = new int[6];
-        counts[d1 - 1]++;
-        counts[d2 - 1]++;
-        counts[d3 - 1]++;
-        counts[d4 - 1]++;
-        counts[d5 - 1]++;
-        int at;
-        for (at = 0; at != 6; at++)
-            if (counts[6 - at - 1] >= 2)
-                return (6 - at) * 2;
-        return 0;
+    public int score_pair() {
+
+        Optional<Integer> biggestValue = Arrays.stream(dices)
+                .mapToObj(value -> new SimpleEntry<Integer, Integer>(value, 1))
+                .collect(Collectors.groupingBy(SimpleEntry::getKey, Collectors.counting()))
+                .entrySet().stream()
+                .filter(entry -> entry.getValue() >= 2)
+                .map(Entry::getKey)
+                .max(Comparator.naturalOrder());
+
+
+        if(biggestValue.isPresent()){
+            return Long.valueOf(2 * biggestValue.get())
+                    .intValue();
+        } else {
+            return 0;
+        }
+
     }
 
     public static int two_pair(int d1, int d2, int d3, int d4, int d5) {
