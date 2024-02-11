@@ -196,11 +196,14 @@ public class RollDiceTest {
             assertEquals(expectedScore, new RollDice(dices).smallStraight());
         }
 
-        @Test
-        public void large_straight() {
-            assertEquals(20, RollDice.largeStraight(6, 2, 3, 4, 5));
-            assertEquals(20, RollDice.largeStraight(2, 3, 4, 5, 6));
-            assertEquals(0, RollDice.largeStraight(1, 2, 2, 4, 5));
+        @ParameterizedTest
+        @CsvSource({
+                "20, 6; 2; 3; 4; 5",
+                "20, 2; 3; 4; 5; 6",
+                "0, 1; 2; 2; 4; 5",
+        })
+        public void large_straight(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
+            assertEquals(expectedScore, new RollDice(dices).largeStraight());
         }
     }
 

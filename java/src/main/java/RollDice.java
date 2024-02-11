@@ -1,6 +1,7 @@
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class RollDice {
@@ -23,7 +24,7 @@ public class RollDice {
     }
 
     public int yatzy() {
-        if (findSameOfAKind(dices, 5)!=0) {
+        if (findSameOfAKind(dices, 5) != 0) {
             return YATZY_SCORE;
         } else {
             return 0;
@@ -59,22 +60,22 @@ public class RollDice {
     }
 
     public int pair() {
-        return findSameOfAKind(dices,2);
+        return findSameOfAKind(dices, 2);
     }
 
     public int threeOfAKind() {
-        return findSameOfAKind(dices,3);
+        return findSameOfAKind(dices, 3);
     }
 
     public int fourOfAKind() {
-        return findSameOfAKind(dices,4);
+        return findSameOfAKind(dices, 4);
     }
 
     private int findSameOfAKind(int[] dices, int nbOfDices) {
         Optional<Integer> biggestDiceValue = findBiggestDiceValue(dices, nbOfDices);
 
 
-        if(biggestDiceValue.isPresent()){
+        if (biggestDiceValue.isPresent()) {
             return calculateDices(nbOfDices, biggestDiceValue.get());
         } else {
             return 0;
@@ -103,10 +104,10 @@ public class RollDice {
 
     public int twoPairs() {
         Optional<Integer> biggestDiceValue = findBiggestDiceValue(dices, 2);
-        if (biggestDiceValue.isPresent()){
+        if (biggestDiceValue.isPresent()) {
             List<Integer> dicesWithoutFirstPair = removeNbOfDicesForValue(biggestDiceValue.get(), 2);
             Optional<Integer> secondPairBiggestValue = findBiggestDiceValue(dicesWithoutFirstPair.stream().mapToInt(i -> i).toArray(), 2);
-            if(secondPairBiggestValue.isPresent()){
+            if (secondPairBiggestValue.isPresent()) {
                 return calculateDices(2, biggestDiceValue.get()) + calculateDices(2, secondPairBiggestValue.get());
             } else {
                 return 0;
@@ -118,7 +119,7 @@ public class RollDice {
 
     private List<Integer> removeNbOfDicesForValue(Integer biggestDiceValue, int nbOfDices) {
         List<Integer> dicesWithoutFirstPair = Arrays.stream(dices).mapToObj(dice -> Integer.valueOf(dice)).collect(Collectors.toList());
-        for(int i = 0; i< nbOfDices; i++){
+        for (int i = 0; i < nbOfDices; i++) {
             dicesWithoutFirstPair.remove(biggestDiceValue);
         }
         return dicesWithoutFirstPair;
@@ -127,10 +128,10 @@ public class RollDice {
 
     public int fullHouse() {
         Optional<Integer> biggestDiceValue = findBiggestDiceValue(dices, 3);
-        if (biggestDiceValue.isPresent()){
+        if (biggestDiceValue.isPresent()) {
             List<Integer> dicesWithoutFirstPair = removeNbOfDicesForValue(biggestDiceValue.get(), 3);
             Optional<Integer> secondPairBiggestValue = findBiggestDiceValue(dicesWithoutFirstPair.stream().mapToInt(i -> i).toArray(), 2);
-            if(secondPairBiggestValue.isPresent()){
+            if (secondPairBiggestValue.isPresent()) {
                 return calculateDices(3, biggestDiceValue.get()) + calculateDices(2, secondPairBiggestValue.get());
             } else {
                 return 0;
@@ -141,31 +142,28 @@ public class RollDice {
     }
 
     public int smallStraight() {
-        boolean existsOnlyOneValuePerDice = countDicesPerValue(dices).values().stream().allMatch(val -> val == 1);
+        Predicate<int []> smallStraightPredicate = (dices)-> dices[0] == 1;
+        return calculateStraight(dices, smallStraightPredicate);
+    }
+
+    public int largeStraight() {
+        Predicate<int []> largeStraightPredicate = (dices)-> dices[4] == 6;
+        return calculateStraight(dices, largeStraightPredicate);
+    }
+
+    private int calculateStraight(int[] dices, Predicate<int []> straightPredicate) {
+        boolean existsOnlyOneValuePerDice = existsOnlyOneValuePerDice(dices);
         Arrays.sort(dices);
-        boolean lowerDiceIsOne = dices[0] == 1;
-        if (existsOnlyOneValuePerDice && lowerDiceIsOne) {
+        boolean diceStraightConstraintIsVerified = straightPredicate.test(dices);
+        if (existsOnlyOneValuePerDice && diceStraightConstraintIsVerified) {
             return Arrays.stream(dices).sum();
         } else {
             return 0;
         }
     }
 
-    public static int largeStraight(int d1, int d2, int d3, int d4, int d5) {
-        int[] tallies;
-        tallies = new int[6];
-        tallies[d1 - 1] += 1;
-        tallies[d2 - 1] += 1;
-        tallies[d3 - 1] += 1;
-        tallies[d4 - 1] += 1;
-        tallies[d5 - 1] += 1;
-        if (tallies[1] == 1 &&
-                tallies[2] == 1 &&
-                tallies[3] == 1 &&
-                tallies[4] == 1
-                && tallies[5] == 1)
-            return 20;
-        return 0;
+    private boolean existsOnlyOneValuePerDice(int[] dices) {
+        return countDicesPerValue(dices).values().stream().allMatch(val -> val == 1);
     }
 
 
