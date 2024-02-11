@@ -1,6 +1,6 @@
 import java.util.*;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -11,7 +11,13 @@ public class RollDice {
     protected int[] dices;
 
     public RollDice(Dice dice1, Dice dice2, Dice dice3, Dice dice4, Dice dice5) {
-        this.dices = new int[]{dice1.getValue(), dice2.getValue(), dice3.getValue(), dice4.getValue(), dice5.getValue()};
+        this.dices = new int[]{
+                dice1.getValue(),
+                dice2.getValue(),
+                dice3.getValue(),
+                dice4.getValue(),
+                dice5.getValue()
+        };
     }
 
     protected RollDice(int... dices) {
@@ -79,7 +85,6 @@ public class RollDice {
     private int findSameOfAKind(int[] dices, int nbOfDices) {
         Optional<Integer> biggestDiceValue = findBiggestDiceValue(dices, nbOfDices);
 
-
         if (biggestDiceValue.isPresent()) {
             return calculateDices(nbOfDices, biggestDiceValue.get());
         } else {
@@ -103,14 +108,14 @@ public class RollDice {
 
     private static Map<Integer, Long> countDicesPerValue(int[] dices) {
         return Arrays.stream(dices)
-                .mapToObj(value -> new SimpleEntry<Integer, Integer>(value, 1))
-                .collect(Collectors.groupingBy(SimpleEntry::getKey, Collectors.counting()));
+                .boxed()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     }
 
     public int twoPairs() {
         Optional<Integer> biggestDiceValue = findBiggestDiceValue(dices, 2);
         if (biggestDiceValue.isPresent()) {
-            List<Integer> dicesWithoutFirstPair = removeNbOfDicesForValue(biggestDiceValue.get(), 2);
+            List<Integer> dicesWithoutFirstPair = removeNbOfDicesForValue(dices, biggestDiceValue.get(), 2);
             Optional<Integer> secondPairBiggestValue = findBiggestDiceValue(dicesWithoutFirstPair.stream().mapToInt(i -> i).toArray(), 2);
             /* TODO: The 2nd condition matchs spec but to be discussed */
             if (secondPairBiggestValue.isPresent() && secondPairBiggestValue.get() != biggestDiceValue.get()) {
@@ -123,10 +128,10 @@ public class RollDice {
         }
     }
 
-    private List<Integer> removeNbOfDicesForValue(Integer biggestDiceValue, int nbOfDices) {
+    private List<Integer> removeNbOfDicesForValue(int[] dices, Integer diceValueToRemove, int nbOfDices) {
         List<Integer> dicesWithoutFirstPair = Arrays.stream(dices).mapToObj(dice -> Integer.valueOf(dice)).collect(Collectors.toList());
         for (int i = 0; i < nbOfDices; i++) {
-            dicesWithoutFirstPair.remove(biggestDiceValue);
+            dicesWithoutFirstPair.remove(diceValueToRemove);
         }
         return dicesWithoutFirstPair;
     }
@@ -135,7 +140,7 @@ public class RollDice {
     public int fullHouse() {
         Optional<Integer> biggestDiceValue = findBiggestDiceValue(dices, 3);
         if (biggestDiceValue.isPresent()) {
-            List<Integer> dicesWithoutFirstPair = removeNbOfDicesForValue(biggestDiceValue.get(), 3);
+            List<Integer> dicesWithoutFirstPair = removeNbOfDicesForValue(dices, biggestDiceValue.get(), 3);
             Optional<Integer> secondPairBiggestValue = findBiggestDiceValue(dicesWithoutFirstPair.stream().mapToInt(i -> i).toArray(), 2);
             /* TODO: The 2nd condition matchs spec but to be discussed */
             if (secondPairBiggestValue.isPresent() && secondPairBiggestValue.get()!= biggestDiceValue.get()) {
