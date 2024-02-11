@@ -172,10 +172,13 @@ public class RollDiceTest {
                 assertEquals(expectedScore, new RollDice(dices).twoPairs());
             }
 
-            @Test
-            public void full_house() {
-                assertEquals(18, RollDice.fullHouse(6, 2, 2, 2, 6));
-                assertEquals(0, RollDice.fullHouse(2, 3, 4, 5, 6));
+            @ParameterizedTest
+            @CsvSource({
+                    "18, 6; 2; 2; 2; 6",
+                    "0, 2; 3; 4; 5; 6",
+            })
+            public void full_house(int expectedScore, @ConvertWith(DiceConverter.class) int[] dices) {
+                assertEquals(expectedScore, new RollDice(dices).fullHouse());
             }
         }
     }

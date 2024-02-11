@@ -1,7 +1,6 @@
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class RollDice {
@@ -101,10 +100,7 @@ public class RollDice {
     public int twoPairs() {
         Optional<Integer> biggestDiceValue = findBiggestDiceValue(dices, 2);
         if (biggestDiceValue.isPresent()){
-            List<Integer> dicesWithoutFirstPair = Arrays.stream(dices).mapToObj(dice -> Integer.valueOf(dice)).collect(Collectors.toList());
-            for(int i=0;i<2;i++){
-                dicesWithoutFirstPair.remove(biggestDiceValue.get());
-            }
+            List<Integer> dicesWithoutFirstPair = removeNbOfDicesForValue(biggestDiceValue.get(), 2);
             Optional<Integer> secondPairBiggestValue = findBiggestDiceValue(dicesWithoutFirstPair.stream().mapToInt(i -> i).toArray(), 2);
             if(secondPairBiggestValue.isPresent()){
                 return calculateDices(2, biggestDiceValue.get()) + calculateDices(2, secondPairBiggestValue.get());
@@ -116,39 +112,28 @@ public class RollDice {
         }
     }
 
+    private List<Integer> removeNbOfDicesForValue(Integer biggestDiceValue, int nbOfDices) {
+        List<Integer> dicesWithoutFirstPair = Arrays.stream(dices).mapToObj(dice -> Integer.valueOf(dice)).collect(Collectors.toList());
+        for(int i = 0; i< nbOfDices; i++){
+            dicesWithoutFirstPair.remove(biggestDiceValue);
+        }
+        return dicesWithoutFirstPair;
+    }
 
-    public static int fullHouse(int d1, int d2, int d3, int d4, int d5) {
-        int[] tallies;
-        boolean _2 = false;
-        int i;
-        int _2_at = 0;
-        boolean _3 = false;
-        int _3_at = 0;
 
-
-        tallies = new int[6];
-        tallies[d1 - 1] += 1;
-        tallies[d2 - 1] += 1;
-        tallies[d3 - 1] += 1;
-        tallies[d4 - 1] += 1;
-        tallies[d5 - 1] += 1;
-
-        for (i = 0; i != 6; i += 1)
-            if (tallies[i] == 2) {
-                _2 = true;
-                _2_at = i + 1;
+    public int fullHouse() {
+        Optional<Integer> biggestDiceValue = findBiggestDiceValue(dices, 3);
+        if (biggestDiceValue.isPresent()){
+            List<Integer> dicesWithoutFirstPair = removeNbOfDicesForValue(biggestDiceValue.get(), 3);
+            Optional<Integer> secondPairBiggestValue = findBiggestDiceValue(dicesWithoutFirstPair.stream().mapToInt(i -> i).toArray(), 2);
+            if(secondPairBiggestValue.isPresent()){
+                return calculateDices(3, biggestDiceValue.get()) + calculateDices(2, secondPairBiggestValue.get());
+            } else {
+                return 0;
             }
-
-        for (i = 0; i != 6; i += 1)
-            if (tallies[i] == 3) {
-                _3 = true;
-                _3_at = i + 1;
-            }
-
-        if (_2 && _3)
-            return _2_at * 2 + _3_at * 3;
-        else
+        } else {
             return 0;
+        }
     }
 
     public static int smallStraight(int d1, int d2, int d3, int d4, int d5) {
